@@ -1,0 +1,47 @@
+<html>
+ <meta charset="UTF-8">
+  <head>
+    <title>Loading</title>
+    <link rel="stylesheet" href="instructions.css">
+    <script	src="libs/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.rawgit.com/Cmell/JavascriptUtilsV9-20-2017/e2fb93a4/Util.js"></script>
+    <script src="/assets/javascripts/jatos.js"></script>
+    <script src='TaskControl.js'></script>
+  </head>
+  <body>
+    <div class="instructions">
+      <p>
+        Loading...
+      </p>
+    </div>
+
+  </body>
+  <script>
+  jatos.onLoad(function () {
+    // Calculate and set the accuracy rate.
+    var eArr = jatos.studySessionData.errArray;
+    var nTrials = 0;
+    var nErrors = 0;
+    var pracTypes = ['practice_cats', 'practice_cat_red'];
+    for (var i=0; i < eArr.length; i++) {
+      var curE = eArr[i];
+      if (pracTypes.indexOf(curE.blockType) < 0) {
+        // only add trials to the counts if we are doing practice blocks or if
+        // these are not practice blocks.
+        nTrials = nTrials + curE.nTrials;
+        nErrors = nErrors + curE.nErrors;
+      }
+    };
+
+    var errRate = nErrors / nTrials;
+    var accRate = 1 - errRate;
+
+    var res = {
+      accuracy: accRate
+    };
+    jatos.addJatosIds(res);
+
+    advanceTask(res);
+  });
+  </script>
+</html>

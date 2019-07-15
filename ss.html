@@ -1,0 +1,68 @@
+<html>
+<meta charset="UTF-8">
+<head>
+  <title>Survey</title>
+  <link rel="stylesheet" href="instructions.css">
+  <link href="https://surveyjs.azureedge.net/1.0.41/survey.css" type="text/css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://cdn.rawgit.com/Cmell/JavascriptUtilsV9-20-2017/e2fb93a4/Util.js"></script>
+  <script src="/assets/javascripts/jatos.js"></script>
+  <script src="https://surveyjs.azureedge.net/1.0.41/survey.jquery.min.js"></script>
+  <script src='TaskControl.js'></script>
+</head>
+<body>
+  <div id="surveyContainer" class=instructions></div>
+</body>
+<script>
+function endSurvey(survey, options) {
+  var resData = survey.data;
+  jatos.addJatosIds(resData);
+  // send the study to the flow control page.
+  advanceTask(resData);
+};
+function loadSurveyJSON(url, callback)
+{
+  var request = new XMLHttpRequest();
+  request.open('GET', url);
+  request.responseType = 'json';
+  request.send();
+  request.onload = function () {
+    var data = request.response;
+    callback(data);
+  };
+};
+  /*
+  // Adding the script tag to the head as suggested before
+  var head = document.getElementsByTagName('head')[0];
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = url;
+
+  // Then bind the event to the callback function.
+  // There are several events for cross browser compatibility.
+  script.onreadystatechange = callback;
+  script.onload = callback;
+
+  // Fire the loading
+  head.appendChild(script);
+
+};
+*/
+var instantiateSurvey = function (jsonToUse) {
+  var survey = new Survey.Model(jsonToUse);
+  // Change some settings
+  survey.completeText = 'Next';
+  $("#surveyContainer").Survey({
+    model:survey,
+    onComplete:endSurvey
+  });
+};
+
+jatos.onLoad(function () {
+  curSurveyJSONurl = jatos.studySessionData.taskControl[jatos.studySessionData.curIndex].surveyJSON;
+  loadSurveyJSON(curSurveyJSONurl, instantiateSurvey);
+
+});
+
+</script>
+</html>

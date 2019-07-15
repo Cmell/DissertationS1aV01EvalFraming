@@ -1,0 +1,53 @@
+<html>
+ <meta charset="UTF-8">
+  <head>
+    <title>Instructions</title>
+    <link rel="stylesheet" href="instructions.css">
+    <script	src="libs/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.rawgit.com/Cmell/JavascriptUtilsV9-20-2017/e2fb93a4/Util.js"></script>
+    <script src="/assets/javascripts/jatos.js"></script>
+    <script src='TaskControl.js'></script>
+  </head>
+  <body>
+    <div class=instructions>
+      <h3>Study Introduction</h3>
+      <p>
+        To begin we want to introduce you to a speeded categorization task that we will return to later.
+      </p>
+      <h4>GO/NO-GO Task</h4>
+      <p>
+        In this GO/NO-GO task, you will be shown a series of words in the center of the computer screen. Some of the words will belong to <b>TARGET CATEGORIES</b>. If you see a word that belongs to a target category, your task is to &ldquo;GO&rdquo; by pressing the SPACEBAR as quickly as possible.&nbsp;In contrast, if you see a word that does NOT belong to a target category, you should simply ignore it (&ldquo;NO-GO&rdquo;).
+      <p>
+        <ul>
+          <li>For example, if the target category is WHITE OBJECTS you should press the SPACE BAR as fast as you can every time you see a white-object word, and ignore all other words.</li>
+          <li>Each word will only remain on the screen for a fraction of a second.</li>
+          <li>You need to make a response before the word disappears and if you fail to, this will be counted as an error and a <span style="color:#FF0000;\">red X</span> will appear.</li>
+          <li>If you press the SPACE BAR when the word is NOT a target word (not a BIRD), this will also be an error and <span style="color:#0000FF;\">two blue exclamation marks !!</span> will appear.</li>
+          <li>The task is very fast and you will make mistakes! That&rsquo;s okay, just pick up and go on to the next trial.&nbsp;</li>
+        </ul>
+      </p>
+      <p>
+        Press the SPACEBAR to continue.
+      </p>
+    </div>
+  </body>
+  <script>
+  var d = new Date();
+  var startTime = d.getTime();
+  var kp = function (e) {
+    if (e.keyCode == 32) {
+      var d = new Date();
+      var endTime = d.getTime();
+      var timeOnPage = endTime - startTime;
+      var res = {
+        startTime: startTime,
+        endTime: endTime,
+        timeOnPage: timeOnPage
+      };
+      jatos.addJatosIds(res);
+      advanceTask(res);
+    };
+  };
+  window.setTimeout(function () {document.onkeydown = kp;}, 1000);
+  </script>
+</html>

@@ -1,0 +1,85 @@
+<html>
+ <meta charset="UTF-8">
+  <head>
+    <title>Accuracy</title>
+    <link rel="stylesheet" href="instructions.css">
+    <script	src="libs/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.rawgit.com/Cmell/JavascriptUtilsV9-20-2017/e2fb93a4/Util.js"></script>
+    <script src="/assets/javascripts/jatos.js"></script>
+    <script src='TaskControl.js'></script>
+  </head>
+  <body>
+    <div class="instructions">
+      <div style="text-align:center;">
+        <h3>Your accuracy so far:</h3>
+        <h2 id="rateheader"></h2>
+      <p id="message">
+        Remember, try your best to be accurate!
+      </p>
+      <p>
+        Press the SPACEBAR to continue.
+      </p>
+      </div>
+    </div>
+
+  </body>
+  <script>
+  var d = new Date();
+  var startTime = d.getTime();
+  var kp = function (e) {
+    if (e.keyCode == 32) {
+      var d = new Date();
+      var endTime = d.getTime();
+      var timeOnPage = endTime - startTime;
+      var res = {
+        startTime: startTime,
+        endTime: endTime,
+        timeOnPage: timeOnPage
+      };
+      jatos.addJatosIds(res);
+      advanceTask(res);
+    };
+  };
+  jatos.onLoad(function () {
+    window.setTimeout(function () {document.onkeydown = kp;}, 3000);
+
+    // Get current session data
+    var curSesD = jatos.studySessionData.curTaskCtrl;
+    var block = curSesD.blockType;
+
+    // Calculate and set the accuracy rate.
+    var eArr = jatos.studySessionData.errArray;
+    var nTrials = 0;
+    var nErrors = 0;
+    var pracTypes = ['practice_cats', 'practice_cat_red'];
+    for (var i=0; i < eArr.length; i++) {
+      var curE = eArr[i];
+      if (block == 'practice' | pracTypes.indexOf(curE.blockType) < 0) {
+        // only add trials to the counts if we are doing practice blocks or if
+        // these are not practice blocks.
+        nTrials = nTrials + curE.nTrials;
+        nErrors = nErrors + curE.nErrors;
+      }
+    };
+
+    var errRate = Math.round(100 * nErrors / nTrials);
+    var accRate = 100 - errRate;
+    // Set the rate text
+    var hd = document.getElementById("rateheader");
+    hd.innerHTML = accRate + "&#37;";
+
+    // set the message text
+    var msg = document.getElementById("message");
+    if (block == 'last') {
+      msg.innerHTML = "Thank you for completing the task!";
+    } else if (block == 'critical') {
+      if (accRate >= 65) {
+        msg.innerHTML = "Take a brief break before going on. Take a piece of candy!";
+      } else {
+        msg.innerHTML = "Take a brief break before going on. Take a piece of candy!";
+      }
+    }
+
+  });
+  </script>
+</html>

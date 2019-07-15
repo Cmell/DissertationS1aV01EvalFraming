@@ -1,0 +1,319 @@
+<html>
+<meta charset="UTF-8">
+<head>
+  <title>Study</title>
+  <script	src="/study_assets/SpecificityS1b/libs/jquery-1.11.1.min.js"></script>
+  <script src="https://cdn.rawgit.com/Cmell/JavascriptUtilsV9-20-2017/e2fb93a4/Util.js"></script>
+  <script src="/assets/javascripts/jatos.js"></script>
+</head>
+<body>
+  <p id=results>
+    Nothing yet.
+  </p>
+  <p id=results2>
+    Not saved yet.
+  </p>
+  <button type="button" onclick="endGen();">End Component</button>
+</body>
+<script>
+var endGen = function () {
+  jatos.endStudy();
+}
+var main = function () {
+  var numSets = 360;
+  // factors:
+  var frames = ["logical", "caring", "control"];
+  var attributeorder = ["logicalfirst", "caringfirst"];
+  var stereotypeorder = ["stereotypic", "counterstereotypic"];
+  var combinedFactors = expandGrid(
+    [frames, attributeorder, stereotypeorder]
+  );
+  combinedFactors = shuffle(randomRecycle(combinedFactors, numSets));
+
+  var logicalStereotypic = {
+    go:["men", "logical"], nogo:["women", "foolish"]
+  }
+
+// Actual orders:
+  var gnatOrders = {
+    logical: { // Orders for the logical framing condition.
+      logicalfirst: {
+        stereotypic: { // Stereotypic first, logical first
+          go1_1:["men", "logical"],  nogo1_1:["women", "foolish"],
+          go1_2:["women", "logical"],nogo1_2:["men", "foolish"],
+          go1_3:["men", "foolish"],  nogo1_3:["women", "logical"],
+          go1_4:["women", "foolish"],nogo1_4:["men", "logical"],
+          go2_1:["women", "caring"], nogo2_1:["men", "selfish"],
+          go2_2:["men", "caring"],   nogo2_2:["women", "selfish"],
+          go2_3:["women", "selfish"],nogo2_3:["men", "caring"],
+          go2_4:["men", "selfish"],  nogo2_4:["women", "caring"],
+          goEval_1:["men", "good"],  nogoEval_1:["women", "bad"],
+          goEval_2:["women", "good"],nogoEval_2:["men", "bad"],
+          goEval_3:["men", "bad"],   nogoEval_3:["women", "good"],
+          goEval_4:["women", "bad"], nogoEval_4:["men", "good"]
+        },
+        counterstereotypic: { // Counterstereotypic first, logical first
+          go1_1:["women", "logical"],nogo1_1:["men","foolish"],
+          go1_2:["men", "logical"],  nogo1_2:["women","foolish"],
+          go1_3:["women", "foolish"],nogo1_3:["men","logical"],
+          go1_4:["men", "foolish"],  nogo1_4:["women","logical"],
+          go2_1:["men", "caring"],   nogo2_1:["women","selfish"],
+          go2_2:["women", "caring"], nogo2_2:["men","selfish"],
+          go2_3:["men", "selfish"],  nogo2_3:["women","caring"],
+          go2_4:["women", "selfish"],nogo2_4:["men","caring"],
+          goEval_1:["women", "good"],nogoEval_1:["men","bad"],
+          goEval_2:["men", "good"],  nogoEval_2:["women","bad"],
+          goEval_3:["women", "bad"], nogoEval_3:["men","good"],
+          goEval_4:["men", "bad"],   nogoEval_4:["women", "good"]
+        },
+      },
+      caringfirst: {
+        stereotypic: { // Stereotypic first, caring first
+          go1_1:["women", "caring"], nogo1_1:["men","selfish"],
+          go1_2:["men", "caring"],   nogo1_2:["women","selfish"],
+          go1_3:["women", "selfish"],nogo1_3:["men","caring"],
+          go1_4:["men", "selfish"],  nogo1_4:["women","caring"],
+          go2_1:["men", "logical"],  nogo2_1:["women","foolish"],
+          go2_2:["women", "logical"],nogo2_2:["men","foolish"],
+          go2_3:["men", "foolish"],  nogo2_3:["women","logical"],
+          go2_4:["women", "foolish"],nogo2_4:["men","logical"],
+          goEval_1:["men", "good"],  nogoEval_1:["women","bad"],
+          goEval_2:["women", "good"],nogoEval_2:["men","bad"],
+          goEval_3:["men", "bad"],   nogoEval_3:["women","good"],
+          goEval_4:["women", "bad"], nogoEval_4:["men","good"]
+        },
+        counterstereotypic: { // Counterstereotypic first, caring first
+          go1_1:["men", "caring"],   nogo1_1:["women","selfish"],
+          go1_2:["women", "caring"], nogo1_2:["men","selfish"],
+          go1_3:["men", "selfish"],  nogo1_3:["women","caring"],
+          go1_4:["women", "selfish"],nogo1_4:["men","caring"],
+          go2_1:["women", "logical"],nogo2_1:["men","foolish"],
+          go2_2:["men", "logical"],  nogo2_2:["women","foolish"],
+          go2_3:["women", "foolish"],nogo2_3:["men","logical"],
+          go2_4:["men", "foolish"],  nogo2_4:["women","logical"],
+          goEval_1:["women", "good"],nogoEval_1:["men","bad"],
+          goEval_2:["men", "good"],  nogoEval_2:["women","bad"],
+          goEval_3:["women", "bad"], nogoEval_3:["men","good"],
+          goEval_4:["men", "bad"],   nogoEval_4:["women","good"]
+        }
+      },
+    },
+    caring: { // Orders for the caring/control framing conditions.
+      logicalfirst: {
+        stereotypic: { // Stereotypic first, logical first
+          go1_1:["men", "logical"],  nogo1_1:["women", "foolish"],
+          go1_2:["women", "logical"],nogo1_2:["men", "foolish"],
+          go1_3:["men", "foolish"],  nogo1_3:["women", "logical"],
+          go1_4:["women", "foolish"],nogo1_4:["men", "logical"],
+          go2_1:["women", "caring"], nogo2_1:["men", "selfish"],
+          go2_2:["men", "caring"],   nogo2_2:["women", "selfish"],
+          go2_3:["women", "selfish"],nogo2_3:["men", "caring"],
+          go2_4:["men", "selfish"],  nogo2_4:["women", "caring"],
+          goEval_1:["women", "good"],nogoEval_1:["men","bad"],
+          goEval_2:["men", "good"],  nogoEval_2:["women","bad"],
+          goEval_3:["women", "bad"], nogoEval_3:["men","good"],
+          goEval_4:["men", "bad"],   nogoEval_4:["women","good"]
+        },
+        counterstereotypic: { // Counterstereotypic first, logical first
+          go1_1:["women", "logical"],nogo1_1:["men","foolish"],
+          go1_2:["men", "logical"],  nogo1_2:["women","foolish"],
+          go1_3:["women", "foolish"],nogo1_3:["men","logical"],
+          go1_4:["men", "foolish"],  nogo1_4:["women","logical"],
+          go2_1:["men", "caring"],   nogo2_1:["women","selfish"],
+          go2_2:["women", "caring"], nogo2_2:["men","selfish"],
+          go2_3:["men", "selfish"],  nogo2_3:["women","caring"],
+          go2_4:["women", "selfish"],nogo2_4:["men","caring"],
+          goEval_1:["men", "good"],  nogoEval_1:["women","bad"],
+          goEval_2:["women", "good"],nogoEval_2:["men","bad"],
+          goEval_3:["men", "bad"],   nogoEval_3:["women","good"],
+          goEval_4:["women", "bad"], nogoEval_4:["men","good"]
+        }
+      },
+      caringfirst: {
+        stereotypic: { // Stereotypic first, caring first
+          go1_1:["women", "caring"], nogo1_1:["men","selfish"],
+          go1_2:["men", "caring"],   nogo1_2:["women","selfish"],
+          go1_3:["women", "selfish"],nogo1_3:["men","caring"],
+          go1_4:["men", "selfish"],  nogo1_4:["women","caring"],
+          go2_1:["men", "logical"],  nogo2_1:["women","foolish"],
+          go2_2:["women", "logical"],nogo2_2:["men","foolish"],
+          go2_3:["men", "foolish"],  nogo2_3:["women","logical"],
+          go2_4:["women", "foolish"],nogo2_4:["men","logical"],
+          goEval_1:["women", "good"],nogoEval_1:["men","bad"],
+          goEval_2:["men", "good"],  nogoEval_2:["women","bad"],
+          goEval_3:["women", "bad"], nogoEval_3:["men","good"],
+          goEval_4:["men", "bad"],   nogoEval_4:["women","good"]
+        },
+        counterstereotypic: { // Counterstereotypic first, caring first
+          go1_1:["men", "caring"],   nogo1_1:["women","selfish"],
+          go1_2:["women", "caring"], nogo1_2:["men","selfish"],
+          go1_3:["men", "selfish"],  nogo1_3:["women","caring"],
+          go1_4:["women", "selfish"],nogo1_4:["men","caring"],
+          go2_1:["women", "logical"],nogo2_1:["men","foolish"],
+          go2_2:["men", "logical"],  nogo2_2:["women","foolish"],
+          go2_3:["women", "foolish"],nogo2_3:["men","logical"],
+          go2_4:["men", "foolish"],  nogo2_4:["women","logical"],
+          goEval_1:["men", "good"],  nogoEval_1:["women","bad"],
+          goEval_2:["women", "good"],nogoEval_2:["men","bad"],
+          goEval_3:["men", "bad"],   nogoEval_3:["women","good"],
+          goEval_4:["women", "bad"], nogoEval_4:["men","good"]
+        }
+      }
+    },
+    control: { // Orders for the caring/control framing conditions.
+      logicalfirst: {
+        stereotypic: { // Stereotypic first, logical first
+          go1_1:["men", "logical"],  nogo1_1:["women", "foolish"],
+          go1_2:["women", "logical"],nogo1_2:["men", "foolish"],
+          go1_3:["men", "foolish"],  nogo1_3:["women", "logical"],
+          go1_4:["women", "foolish"],nogo1_4:["men", "logical"],
+          go2_1:["women", "caring"], nogo2_1:["men", "selfish"],
+          go2_2:["men", "caring"],   nogo2_2:["women", "selfish"],
+          go2_3:["women", "selfish"],nogo2_3:["men", "caring"],
+          go2_4:["men", "selfish"],  nogo2_4:["women", "caring"],
+          goEval_1:["women", "good"],nogoEval_1:["men","bad"],
+          goEval_2:["men", "good"],  nogoEval_2:["women","bad"],
+          goEval_3:["women", "bad"], nogoEval_3:["men","good"],
+          goEval_4:["men", "bad"],   nogoEval_4:["women","good"]
+        },
+        counterstereotypic: { // Counterstereotypic first, logical first
+          go1_1:["women", "logical"],nogo1_1:["men","foolish"],
+          go1_2:["men", "logical"],  nogo1_2:["women","foolish"],
+          go1_3:["women", "foolish"],nogo1_3:["men","logical"],
+          go1_4:["men", "foolish"],  nogo1_4:["women","logical"],
+          go2_1:["men", "caring"],   nogo2_1:["women","selfish"],
+          go2_2:["women", "caring"], nogo2_2:["men","selfish"],
+          go2_3:["men", "selfish"],  nogo2_3:["women","caring"],
+          go2_4:["women", "selfish"],nogo2_4:["men","caring"],
+          goEval_1:["men", "good"],  nogoEval_1:["women","bad"],
+          goEval_2:["women", "good"],nogoEval_2:["men","bad"],
+          goEval_3:["men", "bad"],   nogoEval_3:["women","good"],
+          goEval_4:["women", "bad"], nogoEval_4:["men","good"]
+        }
+      },
+      caringfirst: { // control, same as the caring
+        stereotypic: { // Stereotypic first, caring first
+          go1_1:["women", "caring"], nogo1_1:["men","selfish"],
+          go1_2:["men", "caring"],   nogo1_2:["women","selfish"],
+          go1_3:["women", "selfish"],nogo1_3:["men","caring"],
+          go1_4:["men", "selfish"],  nogo1_4:["women","caring"],
+          go2_1:["men", "logical"],  nogo2_1:["women","foolish"],
+          go2_2:["women", "logical"],nogo2_2:["men","foolish"],
+          go2_3:["men", "foolish"],  nogo2_3:["women","logical"],
+          go2_4:["women", "foolish"],nogo2_4:["men","logical"],
+          goEval_1:["women", "good"],nogoEval_1:["men","bad"],
+          goEval_2:["men", "good"],  nogoEval_2:["women","bad"],
+          goEval_3:["women", "bad"], nogoEval_3:["men","good"],
+          goEval_4:["men", "bad"],   nogoEval_4:["women","good"]
+        },
+        counterstereotypic: { // Counterstereotypic first, caring first
+          go1_1:["men", "caring"],   nogo1_1:["women","selfish"],
+          go1_2:["women", "caring"], nogo1_2:["men","selfish"],
+          go1_3:["men", "selfish"],  nogo1_3:["women","caring"],
+          go1_4:["women", "selfish"],nogo1_4:["men","caring"],
+          go2_1:["women", "logical"],nogo2_1:["men","foolish"],
+          go2_2:["men", "logical"],  nogo2_2:["women","foolish"],
+          go2_3:["women", "foolish"],nogo2_3:["men","logical"],
+          go2_4:["men", "foolish"],  nogo2_4:["women","logical"],
+          goEval_1:["men", "good"],  nogoEval_1:["women","bad"],
+          goEval_2:["women", "good"],nogoEval_2:["men","bad"],
+          goEval_3:["men", "bad"],   nogoEval_3:["women","good"],
+          goEval_4:["women", "bad"], nogoEval_4:["men","good"]
+        }
+      }
+    }
+  };
+  var gnatCategories = {
+    logicalfirst: [
+      ["men", "women", "logical", "foolish", "birds"],
+      ["men", "women", "caring", "selfish", "birds"]
+    ],
+    caringfirst:  [
+      ["men", "women", "caring", "selfish", "birds"],
+      ["men", "women", "logical", "foolish", "birds"]
+    ],
+    evaluative: ["men", "women", "good", "bad", "birds"]
+  }
+  var taskInverse = {
+    logicalfirst: 'caringfirst',
+    caringfirst: 'logicalfirst'
+  };
+
+  // Build each JSON entry as a javascript object.
+  var allConds = [];
+  var cur = [];
+  var curObj = {};
+  for (var i=0; i<combinedFactors.length; i++) {
+    cur = combinedFactors[i];
+    task1 = cur[1];
+    task2 = taskInverse[cur[1]];
+    curObj = {
+      frame: cur[0],
+      taskorder: cur[1],
+      stereotypicorder: cur[2],
+      evalCat1: gnatCategories['evaluative'][0],
+      evalCat2: gnatCategories['evaluative'][1],
+      evalCat3: gnatCategories['evaluative'][2],
+      evalCat4: gnatCategories['evaluative'][3],
+      evalGo1: gnatOrders[cur[0]][cur[1]][cur[2]].goEval_1,
+      evalGo2: gnatOrders[cur[0]][cur[1]][cur[2]].goEval_2,
+      evalGo3: gnatOrders[cur[0]][cur[1]][cur[2]].goEval_3,
+      evalGo4: gnatOrders[cur[0]][cur[1]][cur[2]].goEval_4,
+      evalNogo1: gnatOrders[cur[0]][cur[1]][cur[2]].nogoEval_1,
+      evalNogo2: gnatOrders[cur[0]][cur[1]][cur[2]].nogoEval_2,
+      evalNogo3: gnatOrders[cur[0]][cur[1]][cur[2]].nogoEval_3,
+      evalNogo4: gnatOrders[cur[0]][cur[1]][cur[2]].nogoEval_4,
+      task1Cat1: gnatCategories[task1][0][0],
+      task1Cat2: gnatCategories[task1][0][1],
+      task1Cat3: gnatCategories[task1][0][2],
+      task1Cat4: gnatCategories[task1][0][3],
+      task1go1: gnatOrders[cur[0]][cur[1]][cur[2]].go1_1,
+      task1go2: gnatOrders[cur[0]][cur[1]][cur[2]].go1_2,
+      task1go3: gnatOrders[cur[0]][cur[1]][cur[2]].go1_3,
+      task1go4: gnatOrders[cur[0]][cur[1]][cur[2]].go1_4,
+      task1nogo1: gnatOrders[cur[0]][cur[1]][cur[2]].nogo1_1,
+      task1nogo2: gnatOrders[cur[0]][cur[1]][cur[2]].nogo1_2,
+      task1nogo3: gnatOrders[cur[0]][cur[1]][cur[2]].nogo1_3,
+      task1nogo4: gnatOrders[cur[0]][cur[1]][cur[2]].nogo1_4,
+      task2Cat1: gnatCategories[task2][0][0],
+      task2Cat2: gnatCategories[task2][0][1],
+      task2Cat3: gnatCategories[task2][0][2],
+      task2Cat4: gnatCategories[task2][0][3],
+      task2go1: gnatOrders[cur[0]][cur[1]][cur[2]].go2_1,
+      task2go2: gnatOrders[cur[0]][cur[1]][cur[2]].go2_2,
+      task2go3: gnatOrders[cur[0]][cur[1]][cur[2]].go2_3,
+      task2go4: gnatOrders[cur[0]][cur[1]][cur[2]].go2_4,
+      task2nogo1: gnatOrders[cur[0]][cur[1]][cur[2]].nogo2_1,
+      task2nogo2: gnatOrders[cur[0]][cur[1]][cur[2]].nogo2_2,
+      task2nogo3: gnatOrders[cur[0]][cur[1]][cur[2]].nogo2_3,
+      task2nogo4: gnatOrders[cur[0]][cur[1]][cur[2]].nogo2_4,
+
+      usedInRun: false
+    };
+    allConds.push(curObj);
+  };
+
+  // Put everything in the object format.
+  allCondsObj = {condition:{}};
+  for (var i=0;i<allConds.length; i++) {
+    allCondsObj.condition[i] = allConds[i];
+  };
+
+  document.getElementById('results').innerHTML = "main ran!";
+  return(allCondsObj);
+};
+
+jatos.onLoad(function () {
+  var onSave = function () {
+    document.getElementById('results2').innerHTML = "saved!";
+  };
+  var onSaveEr = function () {
+    document.getElementById('results2').innerHTML = "NOT saved!";
+  };
+  res = main();
+  jatos.appendResultData(res, onSave, onSaveEr);
+}
+);
+
+</script>
+</html>

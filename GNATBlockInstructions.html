@@ -1,0 +1,76 @@
+<html>
+ <meta charset="UTF-8">
+  <head>
+    <title>Instructions</title>
+    <link rel="stylesheet" href="instructions.css">
+    <script	src="libs/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.rawgit.com/Cmell/JavascriptUtilsV9-20-2017/e2fb93a4/Util.js"></script>
+    <script src="/assets/javascripts/jatos.js"></script>
+    <link href="https://surveyjs.azureedge.net/1.0.41/survey.css" type="text/css" rel="stylesheet" />
+    <script src='TaskControl.js'></script>
+  </head>
+  <body>
+    <div class=instructions>
+      <p>
+        In this block of trials, your task is to select things from the
+        following categories:
+      </p>
+      <p id=para1 style="color:blue">
+        <strong>CAT1</strong> and <strong>CAT2</strong>
+      </p>
+      <p id=para2>
+        When you see either CAT1 or a CAT2 word, you
+        must press the spacebar as quickly as possible while the word is on the
+        screen. You should ignore all other things.
+      </p>
+      <p>
+        As you have seen, there is very little time to make each
+        decision. To be accurate, it is important that you concentrate.
+      </p>
+      <p>
+        Press the SPACEBAR to continue.
+      </p>
+    </div>
+  </body>
+  <script>
+  var d = new Date();
+  var startTime = d.getTime();
+  jatos.onLoad(function () {
+    // Grab the labels and text.
+    var curTaskCtrl = jatos.studySessionData.curTaskCtrl;
+    var cat1 = curTaskCtrl.cat1;
+    var cat2 = curTaskCtrl.cat2;
+
+    // Change text to align with the block
+
+    var p1 = document.getElementById("para1");
+    var p2 = document.getElementById("para2");
+
+    p1.innerHTML = "<strong>"+cat1.toUpperCase()+"</strong> and <strong>"+
+      cat2.toUpperCase()+"</strong>";
+    p2.innerHTML = "When you see words from the cateogry " + cat1.toUpperCase() +
+    " or words from the category " +
+      cat2.toUpperCase() + ", you\
+      must press the spacebar as quickly as possible while the word is on the\
+      screen. You should ignore all other things.";
+
+    // Wait 1 second and add the key press handler
+    window.setTimeout(function () {document.onkeydown = kp;}, 1000);
+  });
+
+  var kp = function (e) {
+    if (e.keyCode == 32) {
+      var d = new Date();
+      var endTime = d.getTime();
+      var timeOnPage = endTime - startTime;
+      var res = {
+        startTime: startTime,
+        endTime: endTime,
+        timeOnPage: timeOnPage
+      };
+      jatos.addJatosIds(res);
+      advanceTask(res);
+    };
+  };
+  </script>
+</html>

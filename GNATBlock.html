@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+ <meta charset="UTF-8">
+  <head>
+    <title>Study</title>
+		<link rel="stylesheet" href="gnat.css">
+    <script src="libs/easeljs-0.8.2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+		<script	src="libs/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.rawgit.com/Cmell/JavascriptUtilsV9-20-2017/e2fb93a4/Util.js"></script>
+    <script src="/assets/javascripts/jatos.js"></script>
+    <script src='TaskControl.js'></script>
+  </head>
+  <body>
+		<canvas id="myCanvas" width="640" height="480"></canvas>
+  </body>
+		<script type="text/javascript">
+      var errorRate = function (resps) {
+        var nTrials = resps.length;
+        var nErrors = 0;
+        var curTrial = {};
+        var errorCodes = ['MISS', 'FA'];
+        for (var i=0; i < resps.length; i++) {
+          curTrial = resps[i];
+          if (errorCodes.indexOf(curTrial.sdtRespCode) >= 0) {
+            nErrors++;
+          };
+        };
+        var errObj = {
+          nTrials: nTrials,
+          nErrors: nErrors,
+          errorRate: (nErrors / nTrials)
+        };
+        return(errObj);
+      };
+
+      var main = function (curSesD) {
+        var kp = function (e) {
+  				if (step == "stim" && e.keyCode == 32) {
+  					keypressed = true;
+  				};
+  			};
+
+        var endGNAT = function () {
+          advanceTask();
+        };
+
+        var appendThisData = function (
+          dataToAppend,
+          numAttempts=0,
+          maxAttempts=3
+        ) {
+          jatos.appendResultData(
+            dataToAppend,
+            onSuccess = function () {console.log('Saved line')},
+            onError = function () { // on failure, recursively try again.
+              numAttempts++;
+              console.log("Failed. numAttempts: " + numAttempts);
+              if (numAttempts < maxAttempts) {
+                appendThisData(dataToAppend, numAttempts);
+              }
+            }
+          );
+        };
+
+        var setThisSessionData = function () {
+          jatos.setStudySessionData(
+            jatos.studySessionData,
+            endGNAT,
+            function () { // on failure, recursively try again.
+              if (numSessionSaveAttempts < 5) {
+                numSessionSaveAttempts++;
+                setThisSessionData();
+              } else {
+                endGNAT();
+              }
+            }
+          )
+        }
+
+        document.onkeydown = kp;
+
+        // Get parameters from session data if provided.
+        var isi = typeof curSesD.isi === 'undefined' ? 150 : curSesD.isi;
+        var stimdur = typeof curSesD.stimdur === 'undefined' ? 1000 : curSesD.stimdur;
+        var fbtime = typeof curSesD.fbtime === 'undefined' ? 150 : curSesD.fbtime;
+        var leftLab = typeof curSesD.leftLab === 'undefined' ? "" : curSesD.leftLab;
+        var rightLab = typeof curSesD.rightLab === 'undefined' ? "" : curSesD.rightLab;
+        var pid = typeof curSesD.pid === 'undefined' ? jatos.workerId : curSesD.pid;
+        var blockNum = typeof curSesD.blockNum === 'undefined' ? 0 : curSesD.blockNum;
+        var blockType = typeof curSesD.blockType === 'undefined' ? 'none' : curSesD.blockType;
+        //var numResultSaveAttempts = 0;
+        var numSessionSaveAttempts = 0;
+        var numBackupSaveAttempts = 0;
+
+        //debugger;
+
+  			var stage = new createjs.Stage("myCanvas");
+  			var border = new createjs.Shape();
+  			border.graphics.beginStroke("blue").drawRect(0,0,640,480);
+  			stage.addChild(border);
+
+  			var catL = new createjs.Text(leftLab, "30px Arial");
+  			catL.x = 10;
+  			catL.y = 10;
+  			var catR = new createjs.Text(rightLab, "30px Arial");
+  			catR.x = 630;
+  			catR.y = 10;
+  			catR.textAlign="right";
+  			var stim = new createjs.Text("+","40px Arial");
+  			stim.x = 320;
+  			stim.y = 240;
+  			stim.textAlign = "center";
+  			stim.textBaseline = "middle";
+
+        if (typeof curSesD.stims === 'undefined') {
+          var stims = curSesD.stims = rndSelect(
+          [
+            ["dog", "go"],
+            ["cat", "go"],
+            ["tree", "nogo"],
+            ["flower", "nogo"]
+          ],
+          20);
+          debugger;
+        } else {
+          var stims = curSesD.stims;
+        }
+
+  			var trialIndex = 0;
+  			var responses = [];
+  			var stimTime = 0;
+
+  			stage.addChild(catL);
+  			stage.addChild(catR);
+  			stage.addChild(stim);
+
+  			stage.update();
+  			var step = "getready3";
+
+  			var nextStim =stims[0][0];
+  			var trialType = stims[0][1];
+        var stimulusCategory = stims[0][2];
+  			keypressed = false;
+  			var resp = {};
+  			var respTime = 0;
+
+  			function handleTick(event) {
+          if (step == "getready3") {
+            stim.text = "Place your finger on the spacebar\n\nGET READY!!!!\n3";
+            stage.update();
+            if (event.time > 1000) {
+              step = "getready2";
+              createjs.Ticker.reset();
+              createjs.Ticker.addEventListener("tick", handleTick);
+            }
+          } else if (step == "getready2") {
+            stim.text = "Place your finger on the spacebar\n\nGET READY!!!!\n2";
+            stage.update();
+            if (event.time > 1000) {
+              step = "getready1";
+              createjs.Ticker.reset();
+              createjs.Ticker.addEventListener("tick", handleTick);
+            }
+          } else if (step == "getready1") {
+            stim.text = "Place your finger on the spacebar\n\nGET READY!!!!\n1";
+            stage.update();
+            if (event.time > 1000) {
+              step = "isi";
+              createjs.Ticker.reset();
+              createjs.Ticker.addEventListener("tick", handleTick);
+            }
+          } else if (step == "isi") {
+  					if (event.time>isi) {
+  						stim.text =nextStim;
+  						stage.update();
+  						step = "stim";
+  						stimTime = event.time;
+  						stimend = stimTime + stimdur;
+  					}
+  				} else if (step == "stim") {
+  					if (keypressed || event.time>=stimend) {
+  						respTime =  Math.round(event.time - stimTime);
+  						fbend = event.time+fbtime;
+              // Assemble the results string here.
+              var trialNum = trialIndex + 1;
+              resp = {
+                blockNum:blockNum,
+                trialNum:trialNum,
+                blockType:blockType,
+                stimCat:stimulusCategory,
+                trialType:trialType,
+                stimText:stim.text
+              };
+              if (keypressed) {
+                resp.keyPressed = "Y";
+                resp.rt = respTime;
+  							if (trialType == "go") {
+  								stim.text = "+";
+  								stim.color="black";
+                  resp.sdtRespCode = "HIT";
+  							} else {
+  								stim.text = "X";
+  								stim.color = "red";
+  								stim.font = "80px Arial";
+                  resp.sdtRespCode = "FA";
+  							}
+  						} else {
+                resp.keyPressed = "N";
+                resp.rt = respTime;
+  							if (trialType == "go") {
+  								stim.text = "!!";
+  								stim.color = "blue";
+                  resp.sdtRespCode = "MISS";
+  							} else {
+  								stim.text = "+";
+  								stim.color = "black";
+                  resp.sdtRespCode = "CR";
+  							}
+  						}
+  						stage.update();
+  						step = "fb";
+  						keypressed = false;
+              //var objName = blockNum.toString() + "_" + trialNum.toString();
+              jatos.addJatosIds(resp);
+  						responses.push(resp); // This primarily serves to calculate error rates
+              appendThisData(resp);
+  					}
+  				} else if (step == "fb") {
+  					if (event.time>fbend) {
+  						createjs.Ticker.reset();
+  						stim.text = "+";
+  						stim.color = "black";
+  						stim.font = "40px Arial";
+  						stage.update();
+  						step = "isi";
+  						trialIndex++;
+  						if (trialIndex == stims.length) {
+
+  							step = "end";
+  							stim.text = "done...";
+  							stage.update();
+                createjs.Ticker.addEventListener("tick", handleTick);
+  						} else {
+  							step = "isi";
+  							nextStim = stims[trialIndex][0];
+  							trialType = stims[trialIndex][1];
+                stimulusCategory = stims[trialIndex][2];
+  							createjs.Ticker.addEventListener("tick", handleTick);
+  						}
+  					}
+  				} else if (step == "end") {
+            createjs.Ticker.removeAllEventListeners();
+
+            // add the error rate information
+            var errObj = errorRate(responses);
+            errObj.blockType = blockType;
+            jatos.studySessionData.errArray.push(errObj);
+
+            // Set the study session data and start next component
+            setThisSessionData();
+          }
+  			 }
+         createjs.Ticker.interval = 1;
+ 				createjs.Ticker.addEventListener("tick", handleTick);
+      };
+
+      jatos.onLoad(function() {
+        main(jatos.studySessionData.curTaskCtrl);
+			});
+		</script>
+
+</html>

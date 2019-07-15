@@ -1,0 +1,67 @@
+<html>
+ <meta charset="UTF-8">
+  <head>
+    <title>Instructions</title>
+    <link rel="stylesheet" href="instructions.css">
+    <script	src="libs/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.rawgit.com/Cmell/JavascriptUtilsV9-20-2017/e2fb93a4/Util.js"></script>
+    <script src="/assets/javascripts/jatos.js"></script>
+    <link href="https://surveyjs.azureedge.net/1.0.41/survey.css" type="text/css" rel="stylesheet" />
+    <script src='TaskControl.js'></script>
+  </head>
+  <body>
+    <div class=instructions>
+      <p>
+        The next set of GO / NO-GO tasks will involve these categories:
+      </p>
+      <p id=para1 style=text-align:center;font-weight:bold>
+        <br>CAT1</br> <br>CAT2</br><br>CAT3</br> <br>CAT4</br>
+      </p>
+      <p>
+        The next few screens show you the words that will appear in each category to help you become familiar with them.
+      </p>
+      <p>
+        Press the SPACEBAR to continue.
+      </p>
+    </div>
+  </body>
+  <script>
+  var d = new Date();
+  var startTime = d.getTime();
+  jatos.onLoad(function () {
+    // Grab the labels and text.
+    var testCtrl = {
+      cat1: 'Cat1', cat2:'Cat2', cat3:'Cat3', cat4:'Cat4'
+    };
+    var curTaskCtrl = typeof jatos.studySessionData.curTaskCtrl ==='undefined' ? testCtrl:jatos.studySessionData.curTaskCtrl;
+    var cat1 = curTaskCtrl.cat1;
+    var cat2 = curTaskCtrl.cat2;
+    var cat3 = curTaskCtrl.cat3;
+    var cat4 = curTaskCtrl.cat4;
+
+    // Change text to align with the block
+    var p1 = document.getElementById("para1");
+    p1.innerHTML = "<br>"+cat1.toUpperCase()+"</br> <br>"+
+    cat2.toUpperCase()+"</br><br>"+
+      cat3.toUpperCase()+"</br> <br>"+cat4.toUpperCase()+"</br>";
+
+      // Wait 1 second, then add a keypress listener.
+      window.setTimeout(function () {document.onkeydown = kp;}, 1000);
+  });
+
+  var kp = function (e) {
+    if (e.keyCode == 32) {
+      var d = new Date();
+      var endTime = d.getTime();
+      var timeOnPage = endTime - startTime;
+      var res = {
+        startTime: startTime,
+        endTime: endTime,
+        timeOnPage: timeOnPage
+      };
+      jatos.addJatosIds(res);
+      advanceTask(res);
+    };
+  };
+  </script>
+</html>

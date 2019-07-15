@@ -1,0 +1,27 @@
+body {
+	margin:0px;
+	padding:0px;
+  background-color: #d9d9d9;
+}
+
+#myCanvas {
+    padding: 0;
+    margin: auto;
+    display: block;
+    width: 640px;
+    height: 480px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#quit {
+	cursor:pointer;
+	padding: 0;
+	margin: 2em 0 0 2em;
+	position:absolute;
+	bottom: 1em;
+	right: 1em;
+}

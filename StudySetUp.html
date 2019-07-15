@@ -1,0 +1,564 @@
+<html>
+<meta charset='UTF-8'>
+<head>
+  <title>Study</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src='https://cdn.rawgit.com/Cmell/JavascriptUtilsV9-20-2017/e2fb93a4/Util.js'></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.4/seedrandom.min.js"></script>
+  <script src='/assets/javascripts/jatos.js'></script>
+  <script src='TaskControl.js'></script>
+</head>
+<script>
+// Seed the RNG and save that information.
+var d = new Date();
+var seed = d.getTime();
+Math.seedrandom(seed);
+var chooseStudyParameters = function (curCondition) {
+
+  // Settings and global variables.
+  var nCritTrials = 100;
+
+  // Set up the GNAT words
+  var words = {
+    womenWords : [
+      'SARAH',
+      'LAURA',
+      'SUSAN',
+      'JULIA',
+      'NICOLE',
+      'AMANDA',
+      'HEATHER',
+      'REBECCA',
+      'SHANNON',
+      'JENNIFER'
+    ],
+    menWords : [
+      'JASON',
+      'DAVID',
+      'BRIAN',
+      'KEVIN',
+      'ANDREW',
+      'ROBERT',
+      'STEPHEN',
+      'JEFFREY',
+      'MICHAEL',
+      'BENJAMIN'
+    ],
+    goodWords : [
+      'BEACH',
+      'PARADISE',
+      'PUPPY',
+      'SMILE',
+      'SUNRISE'
+    ],
+    badWords : [
+      'DISEASE',
+      'COCKROACH',
+      'POISON',
+      'VOMIT',
+      'FILTH'
+    ],
+    birdWords : [
+      'OWL',
+      'SWALLOW',
+      'STARLING',
+      'ALBATROSS',
+      'BLUEBIRD',
+      'PELICAN',
+      'LARK',
+      'EAGLE',
+      'CARDINAL',
+      'BUNTING'
+    ],
+    animalWords : [
+      'DOG',
+      'HORSE',
+      'MOUSE',
+      'KANGAROO',
+      'DEER',
+      'SHEEP',
+      'SQUIRREL',
+      'MONKEY'
+    ],
+    redWords : [
+      'CHERRY',
+      'TOMATO',
+      'BEET',
+      'CRANBERRY',
+      'BLOOD',
+      'HEART',
+      'BEEF',
+      'RADISH'
+    ],
+    whiteWords : [
+      'MILK',
+      'SNOW',
+      'TOOTH',
+      'BONE',
+      'CLOUD',
+      'COTTON',
+      'PAPER',
+      'CREAM'
+    ],
+    catWords : [
+      'LION',
+      'TIGER',
+      'JAGUAR',
+      'LEOPARD',
+      'CHEETAH',
+      'COUGAR'
+    ],
+    logicalWords : [
+      'ANALYTICAL',
+      'LOGICAL',
+      'OBJECTIVE',
+      'SCIENTIFIC',
+      'SMART'
+    ],
+    foolishWords : [
+      'CARELESS',
+      'FOOLISH',
+      'GULLIBLE',
+      'NAIVE',
+      'FORGETFUL'
+    ],
+    ditzyWords : [
+      'DITZY',
+      'CARELESS',
+      'GULLIBLE',
+      'NAIVE',
+      'FORGETFUL'
+    ],
+    caringWords : [
+      'CARING',
+      'COMPASSIONATE',
+      'GENTLE',
+      'NURTURING',
+      'WARM'
+    ],
+    selfishWords : [
+      'SELFISH',
+      'GREEDY',
+      'CONCEITED',
+      'ARROGANT',
+      'BOASTFUL'
+    ]
+  };
+
+  // Variables to hold all the information for the task.
+  var taskControl = [];
+
+  // Utility functions
+
+  makeGnatStims = function (stims, go_or_nogo, trialType, numTrials) {
+    stims = randomRecycle(stims, numTrials);
+    trialType = typeof trialType === 'undefined' ? 'na' : trialType;
+    retVal = Array();
+    for (i = 0; i < stims.length; i++) {
+      retVal.push([
+        stims[i],
+        go_or_nogo,
+        trialType
+      ]);
+    }
+    return(retVal);
+  };
+
+  var pushGNATToCtrl = function (gCatA, gCatB, nCatA, nCatB, blockNum) {
+    taskControl.push(
+      {
+        id:"GNAT Block Instructions",
+        cat1:gCatA,
+        cat2:gCatB
+      }
+    );
+    taskControl.push(
+      {
+        id:"GNAT Block",
+        leftLab:gCatA.toUpperCase(),
+        rightLab:gCatB.toUpperCase(),
+        blockType:gCatA+'_'+gCatB,
+        blockNum:blockNum,
+        isi:150,
+        stimdur:600,
+        fbtime:150,
+        stims:shuffle(
+          makeGnatStims(words[gCatA + "Words"], "go", gCatA, 20).concat(
+            makeGnatStims(words[gCatB + "Words"], "go", gCatB, 20),
+            makeGnatStims(words[nCatA + "Words"], "nogo", nCatA, 20),
+            makeGnatStims(words[nCatB + "Words"], "nogo", nCatB, 20),
+            makeGnatStims(words.birdWords, "nogo", "bird", 20)
+          )
+        )
+      }
+    );
+  };
+
+  // Secret start for making participants listen to instructions.
+  taskControl.push({
+    id: "Secret Start"
+  });
+
+  // First practice block instructions.
+  taskControl.push({
+    id:"Practice Block 1 Instructions A"
+  });
+  taskControl.push({
+    id:"Practice Block 1 Instructions B"
+  });
+
+  // Make the first practice GNAT block. It is a 20 trial block.
+
+  var pracStims = makeGnatStims(words.catWords, 'go', 'cat', 10).concat(
+    makeGnatStims(words.animalWords, 'nogo', 'animal', 10)
+  );
+  taskControl.push({
+    id:"GNAT Block",
+    stims:rndSelect(pracStims, pracStims.length),
+    leftLab:'CATS',
+    rightLab:'',
+    blockType:'practice_cats',
+    blockNum: 1,
+    isi:150,
+    stimdur:900,
+    fbtime:150
+  });
+
+  // Next is another introduction page for the second practice block.
+  taskControl.push({
+    id:"Practice Block 2 Instructions"
+  });
+
+  // Next is the second practice GNAT block. It is a 32 trial block.
+  var pracStims = makeGnatStims(words.redWords, 'go', 'red', 10).concat(
+    makeGnatStims(words.whiteWords, 'nogo', 'white', 10),
+    makeGnatStims(words.catWords, 'go', 'cat', 10),
+    makeGnatStims(words.animalWords, 'nogo', 'animal', 10)
+  );
+  taskControl.push({
+    id:"GNAT Block",
+    stims:rndSelect(pracStims, pracStims.length),
+    leftLab:'CATS',
+    rightLab:'RED',
+    blockType:'practice_cat_red',
+    blockNum: 2,
+    isi:150,
+    stimdur:700,
+    fbtime:150
+  });
+
+  // Context manipulation
+  taskControl.push(
+    {
+      id: "Framing Manipulation"
+    }
+  );
+
+  // Good-bad GNAT
+  // Good-bad GNAT introduction
+  taskControl.push({
+    id:"GNAT Set Introduction",
+    cat1:'men',
+    cat2:'women',
+    cat3:'good',
+    cat4:'bad'
+  });
+  taskControl.push({
+    id:"GNAT Contact Sheet Prompt",
+    cat1:"gender",
+    cat2:"good-bad"
+  })
+  taskControl.push({
+    id:"GNAT Category Tables",
+    cat1:'men',
+    cat2:'women',
+    words1:words["menWords"],
+    words2:words["womenWords"]
+  });
+  taskControl.push({
+    id:"GNAT Category Tables",
+    cat1:'good',
+    cat2:'bad',
+    words1:words["goodWords"],
+    words2:words["badWords"]
+  });
+
+  // Good-bad block 1
+  pushGNATToCtrl(
+    gCatA = curCondition.evalGo1[0],
+    gCatB = curCondition.evalGo1[1],
+    nCatA = curCondition.evalNogo1[0],
+    nCatB = curCondition.evalNogo1[1],
+    1
+  );
+
+  // Good-bad block 2
+  pushGNATToCtrl(
+    gCatA = curCondition.evalGo2[0],
+    gCatB = curCondition.evalGo2[1],
+    nCatA = curCondition.evalNogo2[0],
+    nCatB = curCondition.evalNogo2[1],
+    2
+  );
+
+  // Good-bad block 3
+  pushGNATToCtrl(
+    gCatA = curCondition.evalGo3[0],
+    gCatB = curCondition.evalGo3[1],
+    nCatA = curCondition.evalNogo3[0],
+    nCatB = curCondition.evalNogo3[1],
+    3
+  );
+
+  // Good-bad block 1
+  pushGNATToCtrl(
+    gCatA = curCondition.evalGo4[0],
+    gCatB = curCondition.evalGo4[1],
+    nCatA = curCondition.evalNogo4[0],
+    nCatB = curCondition.evalNogo4[1],
+    4
+  );
+
+  // First accuracy update
+  // TODO: Consider the accuracy rate?
+
+  taskControl.push({
+    id: "Show Accuracy Rate",
+    blockType: "critical"
+  });
+
+  // GNAT 1 introduction
+  taskControl.push({
+    id:"GNAT Set Introduction",
+    cat1:curCondition.task1Cat1,
+    cat2:curCondition.task1Cat2,
+    cat3:curCondition.task1Cat3,
+    cat4:curCondition.task1Cat4
+  });
+  taskControl.push({
+    id:"GNAT Contact Sheet Prompt",
+    cat1:curCondition.task1Cat3,
+    cat2:curCondition.task1Cat4
+  });
+  taskControl.push({
+    id:"GNAT Category Tables",
+    cat1:curCondition.task1Cat1,
+    cat2:curCondition.task1Cat2,
+    words1:words[curCondition.task1Cat1 + "Words"],
+    words2:words[curCondition.task1Cat2 + "Words"]
+  });
+  taskControl.push({
+    id:"GNAT Category Tables",
+    cat1:curCondition.task1Cat3,
+    cat2:curCondition.task1Cat4,
+    words1:words[curCondition.task1Cat3 + "Words"],
+    words2:words[curCondition.task1Cat4 + "Words"]
+  });
+
+  // GNAT 1 block 1
+  pushGNATToCtrl(
+    gCatA = curCondition.task1go1[0],
+    gCatB = curCondition.task1go1[1],
+    nCatA = curCondition.task1nogo1[0],
+    nCatB = curCondition.task1nogo1[1],
+    1
+  );
+
+  // GNAT 1 block 2
+  pushGNATToCtrl(
+    gCatA = curCondition.task1go2[0],
+    gCatB = curCondition.task1go2[1],
+    nCatA = curCondition.task1nogo2[0],
+    nCatB = curCondition.task1nogo2[1],
+    2
+  );
+
+  // GNAT 1 block 3
+  pushGNATToCtrl(
+    gCatA = curCondition.task1go3[0],
+    gCatB = curCondition.task1go3[1],
+    nCatA = curCondition.task1nogo3[0],
+    nCatB = curCondition.task1nogo3[1],
+    3
+  );
+
+  // GNAT 1 block 4
+  pushGNATToCtrl(
+    gCatA = curCondition.task1go4[0],
+    gCatB = curCondition.task1go4[1],
+    nCatA = curCondition.task1nogo4[0],
+    nCatB = curCondition.task1nogo4[1],
+    4
+  );
+
+  // Second accuracy update
+  // TODO: other accuracy update
+  taskControl.push({
+    id: "Show Accuracy Rate",
+    blockType: "critical"
+  });
+
+  // GNAT 2 introduction
+  taskControl.push({
+    id:"GNAT Set Introduction",
+    cat1:curCondition.task2Cat1,
+    cat2:curCondition.task2Cat2,
+    cat3:curCondition.task2Cat3,
+    cat4:curCondition.task2Cat4,
+  });
+  taskControl.push({
+    id:"GNAT Contact Sheet Prompt",
+    cat1:curCondition.task2Cat3,
+    cat2:curCondition.task2Cat4
+  });
+  taskControl.push({
+    id:"GNAT Category Tables",
+    cat1:curCondition.task2Cat1,
+    cat2:curCondition.task2Cat2,
+    words1:words[curCondition.task2Cat1 + "Words"],
+    words2:words[curCondition.task2Cat2 + "Words"],
+  });
+  taskControl.push({
+    id:"GNAT Category Tables",
+    cat1:curCondition.task2Cat3,
+    cat2:curCondition.task2Cat4,
+    words1:words[curCondition.task2Cat3 + "Words"],
+    words2:words[curCondition.task2Cat4 + "Words"],
+  });
+
+  // GNAT 2 block 1
+  pushGNATToCtrl(
+    gCatA = curCondition.task2go1[0],
+    gCatB = curCondition.task2go1[1],
+    nCatA = curCondition.task2nogo1[0],
+    nCatB = curCondition.task2nogo1[1],
+    1
+  );
+
+  // GNAT 2 block 2
+  pushGNATToCtrl(
+    gCatA = curCondition.task2go2[0],
+    gCatB = curCondition.task2go2[1],
+    nCatA = curCondition.task2nogo2[0],
+    nCatB = curCondition.task2nogo2[1],
+    2
+  );
+
+  // GNAT 2 block 3
+  pushGNATToCtrl(
+    gCatA = curCondition.task2go3[0],
+    gCatB = curCondition.task2go3[1],
+    nCatA = curCondition.task2nogo3[0],
+    nCatB = curCondition.task2nogo3[1],
+    3
+  );
+
+  // GNAT 2 block 4
+  pushGNATToCtrl(
+    gCatA = curCondition.task2go4[0],
+    gCatB = curCondition.task2go4[1],
+    nCatA = curCondition.task2nogo4[0],
+    nCatB = curCondition.task2nogo4[1],
+    4
+  );
+
+  // Final accuracy update
+  //TODO: last accuracy update
+  taskControl.push({
+    id: "Show Accuracy Rate",
+    blockType: "critical"
+  });
+
+  // Store accuracy data
+  taskControl.push({
+    id: "Store Accuracy Data"
+  });
+
+
+
+  // Final demographic survey
+  taskControl.push(
+    {
+      id:"Show Survey",
+      surveyJSON:"DemoSurvey.json"
+    }
+  );
+
+    return(taskControl);
+  };
+
+  var beginStudy = function () {
+    var res = {
+      rngseed: seed,
+      taskControl: jatos.studySessionData.taskControl,
+      batchConditionInfo: jatos.studySessionData.condition,
+      framingCondition: jatos.studySessionData.condition.frame,
+      firstPairing: jatos.studySessionData.condition.stereotypicorder,
+      firstAttributeGnat: jatos.studySessionData.condition.taskorder,
+      sonaCode: jatos.studySessionData.sonaCode
+    };
+    jatos.addJatosIds(res);
+    advanceTask(res);
+  };
+
+  jatos.onLoad(function () {
+
+    var postSessionData = function () {
+      // try to post data 3 times and then fail
+      jatos.setStudySessionData(jatos.studySessionData,
+        beginStudy,
+        function () {
+          window.location = "psych.colorado.edu/~jclab/StudyError";
+        });
+    };
+
+    // variable defns
+    var firstUnused = -1;
+    var allConds = jatos.batchSession.get("condition")
+    var condKeys = Object.keys(allConds);
+
+    // function defns
+    var afterBatchDataOp = function () {
+      console.log("Marked condition as used.");
+      var curCondition = jatos.batchSession.get("condition/"+firstUnused);
+      jatos.studySessionData.condition = curCondition;
+
+      // generate task control and post it to server.
+      jatos.studySessionData.taskControl = chooseStudyParameters(curCondition);
+      jatos.studySessionData.curIndex = -1;
+
+      // Set up a dictionary of component names and ids
+      var idDict = {};
+      var ttl; var tempId;
+      for (var i=0; i<jatos.componentList.length; i++) {
+        ttl = jatos.componentList[i].title;
+        tempId = jatos.componentList[i].id;
+        idDict[ttl] = tempId;
+      }
+      jatos.studySessionData.idDict = idDict;
+
+      // Variable for error rate display
+      jatos.studySessionData.errArray = [];
+
+      postSessionData();
+    };
+    var doBatchDataOp = function () {
+      console.log('attempting to send batch data');
+      jatos.batchSession.replace("/condition/"+firstUnused+"/usedInRun", true,
+        afterBatchDataOp,
+        doBatchDataOp
+      );
+    };
+
+    // Grab a condition from batch session data and mark it as used.
+    for (var i in condKeys) {
+      if (!allConds[i].usedInRun) {
+        firstUnused = i;
+        break;
+      }
+    };
+    doBatchDataOp();
+  });
+
+</script>
+</html>

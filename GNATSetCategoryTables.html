@@ -1,0 +1,108 @@
+<html>
+ <meta charset="UTF-8">
+  <head>
+    <title>Instructions</title>
+    <link rel="stylesheet" href="instructions.css">
+    <script	src="libs/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.rawgit.com/Cmell/JavascriptUtilsV9-20-2017/e2fb93a4/Util.js"></script>
+    <script src="/assets/javascripts/jatos.js"></script>
+    <link href="https://surveyjs.azureedge.net/1.0.41/survey.css" type="text/css" rel="stylesheet" />
+    <script src='TaskControl.js'></script>
+  </head>
+  <body>
+    <div class=instructions>
+      <!--
+      <p id=para1>
+        <strong>CAT1</strong> & <strong>CAT2</strong>
+      </p>
+      -->
+      <table id="wordTable">
+        <tr>
+
+        </tr>
+      </table>
+      <p>
+        Please take a moment to read and remember these words.
+      </p>
+      <p>
+        Press the SPACEBAR to continue.
+      </p>
+    </div>
+  </body>
+  <script>
+  var d = new Date();
+  var startTime = d.getTime();
+  jatos.onLoad(function () {
+    // Grab the labels and text.
+    var testCtrl = {
+      cat1: "TestCat1",
+      cat2: "TestCat2",
+      words1: ['apple', 'tomato', 'carrot'],
+      words2: ['paper', 'clouds', 'headphones']
+    };
+    var curTaskCtrl = typeof jatos.studySessionData.curTaskCtrl==='undefined' ?
+      testCtrl : jatos.studySessionData.curTaskCtrl;
+    var cat1 = curTaskCtrl.cat1
+    var cat2 = curTaskCtrl.cat2
+    var words1 = curTaskCtrl.words1
+    var words2 = curTaskCtrl.words2
+
+    // Change text to align with the block
+    /*
+    var p1 = document.getElementById("para1");
+    p1.innerHTML = "<strong>"+cat1.toUpperCase()+
+    "</strong> & <strong>"+cat2.toUpperCase()+"</strong>";
+    */
+
+    // Build the table.
+    var nRows = Math.max(words1.length, words2.length);
+    var tbl = document.getElementById('wordTable');
+
+    // add header
+    //var th = document.createElement('th');
+    var tr = tbl.children[0];
+    var th1 = document.createElement('th');
+    var th2 = document.createElement('th');
+    th1.innerHTML = "<b>"+cat1.toUpperCase()+"</b>";
+    th2.innerHTML = "<b>"+cat2.toUpperCase()+"</b>";
+    tr.append(th1); tr.append(th2);
+
+    // Fill the rows in.
+    for (var i=0; i<nRows; i++) {
+      var tr = tbl.insertRow();
+      var c1 = tr.insertCell();
+      var c2 = tr.insertCell();
+      if (typeof words1[i] != "undefined") {
+        c1.innerHTML = words1[i];
+      } else {
+        c1.innerHTML = "";
+      };
+      if (typeof words2[i] != "undefined") {
+        c2.innerHTML = words2[i];
+      } else {
+        c2.innerHTML = "";
+      };
+    };
+
+    // Wait 1 second, then add a keypress listener.
+    window.setTimeout(function () {document.onkeydown = kp;}, 1000);
+  });
+
+  var kp = function (e) {
+    if (e.keyCode == 32) {
+      var d = new Date();
+      var endTime = d.getTime();
+      var timeOnPage = endTime - startTime;
+      var res = {
+        startTime: startTime,
+        endTime: endTime,
+        timeOnPage: timeOnPage
+      };
+      jatos.addJatosIds(res);
+      advanceTask(res);
+    };
+  };
+
+
+  </script>
+</html>

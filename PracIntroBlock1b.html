@@ -1,0 +1,88 @@
+<html>
+ <meta charset="UTF-8">
+  <head>
+    <title>Instructions</title>
+    <link rel="stylesheet" href="instructions.css">
+    <script	src="libs/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.rawgit.com/Cmell/JavascriptUtilsV9-20-2017/e2fb93a4/Util.js"></script>
+    <script src="/assets/javascripts/jatos.js"></script>
+    <script src='TaskControl.js'></script>
+  </head>
+  <body>
+    <div class=instructions>
+      <h3>Study Introduction</h3>
+      <p>
+        To give you an idea of how the task works, you will now complete some practice trials.
+      </p>
+      <p>
+        During the trials, the target category is <b>CATS</b>. Whenever you see one of the cat names below, press the spacebar as quickly as you can.
+      </p>
+      <table>
+        <tr>
+          <th>
+            CATS
+          </th>
+        </tr>
+        <tr>
+          <td>
+            LION
+          </td>
+        </tr>
+        <tr>
+          <td>
+            TIGER
+          </td>
+        </tr>
+        <tr>
+          <td>
+            JAGUAR
+          </td>
+        </tr>
+        <tr>
+          <td>
+            LEOPARD
+          </td>
+        </tr>
+        <tr>
+          <td>
+            CHEETAH
+          </td>
+        </tr>
+        <tr>
+          <td>
+            COUGAR
+          </td>
+        </tr>
+        </tr>
+      </table>
+      <p style="text-align:center;">
+        REMEMBER: the words will appear very fast!!
+      </p>
+      <p>
+        Press the SPACEBAR to continue.
+      </p>
+    </div>
+  </body>
+  <script>
+  var d = new Date();
+  var startTime = d.getTime();
+  var kp = function (e) {
+    if (e.keyCode == 32) {
+      var d = new Date();
+      var endTime = d.getTime();
+      var timeOnPage = endTime - startTime;
+      var res = {
+        startTime: startTime,
+        endTime: endTime,
+        timeOnPage: timeOnPage
+      };
+      jatos.addJatosIds(res);
+      advanceTask(res);
+    };
+  };
+  jatos.onLoad(function () {
+
+    window.setTimeout(function () {document.onkeydown = kp;}, 1000);
+  });
+  </script>
+</html>

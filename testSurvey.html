@@ -1,0 +1,39 @@
+<html>
+ <meta charset="UTF-8">
+  <head>
+    <title>Study</title>
+    <script src="libs/easeljs-0.8.2.min.js"></script>
+    <script	src="libs/jquery-1.11.1.min.js"></script>
+    <script src="/assets/javascripts/jatos.js"></script>
+    <script src='TaskControl.js'></script>
+  </head>
+  <script>
+  jatos.onLoad(function () {
+    // Final demographic survey
+    var taskControl = [];
+    taskControl.push(
+      {
+        id:"Show Survey",
+        surveyJSON:"DemoSurvey.json"
+      }
+    );
+
+    // Set up a dictionary of component names and ids
+    var idDict = {};
+    var ttl; var tempId;
+    for (var i=0; i<jatos.componentList.length; i++) {
+      ttl = jatos.componentList[i].title;
+      tempId = jatos.componentList[i].id;
+      idDict[ttl] = tempId;
+    }
+    jatos.studySessionData.idDict = idDict;
+
+    jatos.studySessionData.taskControl = taskControl;
+    jatos.studySessionData.curIndex = -1;
+    jatos.setStudySessionData(jatos.studySessionData,
+      function () {
+        advanceTask();
+      });
+  });
+  </script>
+</html>

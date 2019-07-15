@@ -1,0 +1,401 @@
+{
+ "pages": [
+  {
+   "name": "Basic Demographics",
+   "elements": [
+    {
+     "type": "html",
+     "name": "Demographic Questions Intro",
+     "html": "<p>\nPlease answer the following demographic questions. These questions will help us to understand some general characteristics about our research sample. Note that the information you provide here is strictly confidential.\n</p>"
+    },
+    {
+     "type": "radiogroup",
+     "name": "gender",
+     "title": "You are...",
+     "choices": [
+      {
+       "value": "male",
+       "text": "Male"
+      },
+      {
+       "value": "female",
+       "text": "Female"
+      },
+      {
+       "value": "other",
+       "text": "Other"
+      }
+     ]
+    },
+    {
+     "type": "radiogroup",
+     "name": "handedness",
+     "title": "Which hand is your dominant hand? That is, which hand do you use for most tasks, like writing and eating?",
+     "choices": [
+      {
+       "value": "right",
+       "text": "Right hand"
+      },
+      {
+       "value": "left",
+       "text": "Left hand"
+      },
+      {
+       "value": "ambidextrous",
+       "text": "I can use both hands equally"
+      }
+     ]
+    },
+    {
+     "type": "radiogroup",
+     "name": "maritalStatus",
+     "title": "What is your current marital status?",
+     "choices": [
+      {
+       "value": "single",
+       "text": "Single, never married"
+      },
+      {
+       "value": "relationship",
+       "text": "In a committed relationship"
+      },
+      {
+       "value": "married",
+       "text": "Married"
+      },
+      {
+       "value": "separated",
+       "text": "Separated"
+      },
+      {
+       "value": "divorced",
+       "text": "Divorced"
+      },
+      {
+       "value": "widowed",
+       "text": "Widowed"
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "name": "age",
+     "title": "What is your age?",
+     "inputType": "number"
+    },
+    {
+     "type": "checkbox",
+     "name": "ethnicity",
+     "title": "Which ethnicity do you identify with? (check all that apply)",
+     "hasOther": true,
+     "choices": [
+      {
+       "value": "white",
+       "text": "White/Caucasian"
+      },
+      {
+       "value": "black",
+       "text": "Black/African American"
+      },
+      {
+       "value": "hispanic",
+       "text": "Latino/Hispanic"
+      },
+      {
+       "value": "asian",
+       "text": "Asian or Pacific Islander"
+      },
+      {
+       "value": "namerican",
+       "text": "Native American"
+      }
+     ]
+    },
+    {
+     "type": "radiogroup",
+     "name": "language",
+     "title": "How well do you speak English?",
+     "choices": [
+      {
+       "value": "native",
+       "text": "I am a native English speaker (I was learning English when I was born)."
+      },
+      {
+       "value": "fluent",
+       "text": "English is my second (or third, etc.) language, but I am completely fluent."
+      },
+      {
+       "value": "bad",
+       "text": "I am NOT a fully fluent speaker of English."
+      }
+     ]
+    },
+    {
+     "type": "radiogroup",
+     "name": "education",
+     "title": "What is your highest educational attainment?",
+     "choices": [
+      {
+       "value": "nohs",
+       "text": "Did not finish high-school"
+      },
+      {
+       "value": "hs",
+       "text": "Graduated high-school or equivalent"
+      },
+      {
+       "value": "somecollege",
+       "text": "Some college, no degree yet"
+      },
+      {
+       "value": "associates",
+       "text": "Some college, associate or community-college degree"
+      },
+      {
+       "value": "fouryear",
+       "text": "B.A./B.S. degree"
+      },
+      {
+       "value": "graduate",
+       "text": "Graduate degree"
+      }
+     ]
+    },
+    {
+     "type": "radiogroup",
+     "name": "income",
+     "title": "What is your household's total yearly income? (If financially independent put your own income)",
+     "choices": [
+      {
+       "value": "1",
+       "text": "Less than $12,500"
+      },
+      {
+       "value": "2",
+       "text": "$12,500 - $24,999"
+      },
+      {
+       "value": "3",
+       "text": "$25,000 - $37,499"
+      },
+      {
+       "value": "4",
+       "text": "$37,500 - $49,999"
+      },
+      {
+       "value": "5",
+       "text": "$50,000 - $62,499"
+      },
+      {
+       "value": "6",
+       "text": "$62,500 - $74,999"
+      },
+      {
+       "value": "7",
+       "text": "$75,000 - $87,499"
+      },
+      {
+       "value": "8",
+       "text": "$87,500 - $99,999"
+      },
+      {
+       "value": "9",
+       "text": "$100,000 - $124,999"
+      },
+      {
+       "value": "10",
+       "text": "$125,00 or more"
+      }
+     ]
+    },
+    {
+     "type": "radiogroup",
+     "name": "politic",
+     "title": "How would you describe your political orientation?",
+     "choices": [
+      {
+       "value": "1",
+       "text": "extremely liberal"
+      },
+      {
+       "value": "2",
+       "text": "mostly liberal"
+      },
+      {
+       "value": "3",
+       "text": "somewhat liberal"
+      },
+      {
+       "value": "4",
+       "text": "neutral"
+      },
+      {
+       "value": "5",
+       "text": "somewhat conservative"
+      },
+      {
+       "value": "6",
+       "text": "mostly conservative"
+      },
+      {
+       "value": "7",
+       "text": "extremely conservative"
+      }
+     ]
+    },
+    {
+     "type": "radiogroup",
+     "name": "videoGames",
+     "title": "How often do you play video games?",
+     "choices": [
+      {
+       "value": "0",
+       "text": "I never play video games."
+      },
+      {
+       "value": "1",
+       "text": "I play video games once a year or less."
+      },
+      {
+       "value": "2",
+       "text": "I play video games about once a month."
+      },
+      {
+       "value": "3",
+       "text": "I play video game a few times a month."
+      },
+      {
+       "value": "4",
+       "text": "I play video games several times a week."
+      },
+      {
+       "value": "5",
+       "text": "I play video games every day."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Substance Use",
+   "elements": [
+    {
+     "type": "html",
+     "name": "Substance Explanation",
+     "html": "<p>\nThe next few questions ask you about your use of alcohol and recreational drugs. We wish to emphasize three things:\n</p>\n<ul>\n<li>You are <strong>NOT</strong> required to answer these questions.</li>\n<li>If you choose to answer, the information will remain completely unidentifiable (as will all information you provide during this study).</li>\n<li>Your compensation will not depend on your answers to these questions.</li>\n</ul>\n<p>\nWe ask these questions because the results of the tasks you just performed depend on small differences in reaction time. We would like to have this information so that we can examine the difference in performance when people have used substances.\n</p>"
+    },
+    {
+     "type": "checkbox",
+     "name": "substance",
+     "title": "In the last 3 hours, have you used...",
+     "isRequired": true,
+     "choices": [
+      "alcohol",
+      {
+       "value": "drugs",
+       "text": "recreational drugs"
+      },
+      {
+       "value": "neither",
+       "text": "I have used neither"
+      },
+      {
+       "value": "noresp",
+       "text": "I prefer not to respond"
+      }
+     ]
+    },
+    {
+     "type": "radiogroup",
+     "name": "alcohol quantity",
+     "visibleIf": "{substance} contains \"alcohol\"",
+     "title": "How many drinks have you had in the past 3 hours?",
+     "enableIf": "{substance} contains \"alcohol\"",
+     "choices": [
+      "1",
+      "2",
+      "3",
+      "4",
+      {
+       "value": "5",
+       "text": "5 or more"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "Reaction",
+   "elements": [
+    {
+     "type": "text",
+     "name": "overallReaction",
+     "title": "What did you think of the tasks you performed during this study? Provide any feedback you have here."
+    }
+   ]
+  },
+  {
+   "name": "Prior Task Info",
+   "elements": [
+    {
+     "type": "radiogroup",
+     "name": "taskRepeat",
+     "title": "Have you ever done a task like this before?",
+     "isRequired": true,
+     "choices": [
+      {
+       "value": "yes",
+       "text": "Yes"
+      },
+      {
+       "value": "no",
+       "text": "No"
+      },
+      {
+       "value": "unknown",
+       "text": "Not sure"
+      },
+      {
+       "value": "noresp",
+       "text": "Prefer not to respond"
+      }
+     ]
+    },
+    {
+     "type": "radiogroup",
+     "name": "priorTaskTime",
+     "visibleIf": "{taskRepeat} = \"yes\"",
+     "title": "How long ago did you do the similar task?",
+     "choices": [
+      {
+       "value": "1",
+       "text": "A day ago or less"
+      },
+      {
+       "value": "2",
+       "text": "A week ago"
+      },
+      {
+       "value": "3",
+       "text": "Two weeks ago"
+      },
+      {
+       "value": "4",
+       "text": "A month ago"
+      },
+      {
+       "value": "5",
+       "text": "More than a month ago"
+      }
+     ]
+    },
+    {
+     "type": "text",
+     "name": "priorTaskDescription",
+     "visibleIf": "{taskRepeat} = \"yes\"",
+     "title": "Briefly describe the similar task that you did."
+    }
+   ]
+  }
+ ]
+}

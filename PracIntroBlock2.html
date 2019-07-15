@@ -1,0 +1,118 @@
+<html>
+ <meta charset="UTF-8">
+  <head>
+    <title>Instructions</title>
+    <link rel="stylesheet" href="instructions.css">
+    <script	src="libs/jquery-1.11.1.min.js"></script>
+    <script src="https://cdn.rawgit.com/Cmell/JavascriptUtilsV9-20-2017/e2fb93a4/Util.js"></script>
+    <script src="/assets/javascripts/jatos.js"></script>
+    <script src='TaskControl.js'></script>
+  </head>
+  <body>
+    <div class=instructions>
+      <h3>More Practice!</h3>
+      <p>
+        There will now be two target categories. Your task is to press the spacebar anytime you see a word either from the target category CATS or RED objects. If a word is either a CAT or a RED object (e.g., blood), you should press the SPACE BAR as quickly as possible. Ignore any words that are not a CAT or RED object.
+      </p>
+      <table>
+        <tr>
+          <th>
+            CATS
+          </th>
+          <th>
+            RED OBJECTS
+          </th>
+        </tr>
+        <tr>
+          <td>
+            LION
+          </td>
+          <td>
+            CHERRY
+          </td>
+        </tr>
+        <tr>
+          <td>
+            TIGER
+          </td>
+          <td>
+            TOMATO
+          </td>
+        </tr>
+        <tr>
+          <td>
+            JAGUAR
+          </td>
+          <td>
+            BEET
+          </td>
+        </tr>
+        <tr>
+          <td>
+            LEOPARD
+          </td>
+          <td>
+            CRANBERRY
+          </td>
+        </tr>
+        <tr>
+          <td>
+            CHEETAH
+          </td>
+          <td>
+            BLOOD
+          </td>
+        </tr>
+        <tr>
+          <td>
+            COUGAR
+          </td>
+          <td>
+            HEART
+          </td>
+        </tr>
+        <tr>
+          <td>
+
+          </td>
+          <td>
+            BEEF
+          </td>
+        </tr>
+        <tr>
+          <td>
+
+          </td>
+          <td>
+            RADISH
+          </td>
+        </tr>
+      </table>
+      <p>
+        The words will now appear faster than before. Remember, we are still practicing!
+      </p>
+      <p>
+        Press the SPACEBAR to continue.
+      </p>
+    </div>
+  </body>
+  <script>
+  var d = new Date();
+  var startTime = d.getTime();
+  var kp = function (e) {
+    if (e.keyCode == 32) {
+      var d = new Date();
+      var endTime = d.getTime();
+      var timeOnPage = endTime - startTime;
+      var res = {
+        startTime: startTime,
+        endTime: endTime,
+        timeOnPage: timeOnPage
+      };
+      jatos.addJatosIds(res);
+      advanceTask(res);
+    };
+  };
+  window.setTimeout(function () {document.onkeydown = kp;}, 1000);
+  </script>
+</html>

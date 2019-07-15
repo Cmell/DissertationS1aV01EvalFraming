@@ -1,0 +1,406 @@
+<html>
+<meta charset="UTF-8">
+<head>
+  <title>Survey</title>
+  <link rel="stylesheet" type="text/css" href="basic.css">
+  <link href="https://surveyjs.azureedge.net/1.0.92/survey.css" type="text/css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://surveyjs.azureedge.net/1.0.92/survey.jquery.min.js"></script>
+  <script src="https://cdn.rawgit.com/Cmell/JavascriptUtilsV9-20-2017/e2fb93a4/Util.js"></script>
+  <script src="/assets/javascripts/jatos.js"></script>
+</head>
+<body>
+  <div id="surveyContainer">loading...</div>
+</body>
+<script>
+function endSurvey(survey, options) {
+  var resData = survey.data;
+  jatos.addJatosIds(resData);
+  // send the study to the flow control page.
+  jatos.startComponent(jatos.studySessionData.idDict["Study Flow"], resData);
+};
+function loadSurveyJSON(url, callback)
+{
+  var request = new XMLHttpRequest();
+  request.open('GET', url);
+  request.responseType = 'json';
+  request.send();
+  request.onload = function () {
+    var data = request.response;
+    callback(data);
+  };
+};
+
+var instantiateSurvey = function (jsonToUse) {
+  //Survey.Survey.cssType = "bootstrap";
+  var survey = new Survey.Model(jsonToUse);
+  // Change some settings
+  survey.completeText = 'Next';
+  survey.completedHtml = 'Thank you! Please wait while the task loads.'
+  $("#surveyContainer").Survey({
+    model:survey,
+    onComplete:endSurvey
+  });
+};
+
+// Survey JSONs
+var logical = {
+ "pages": [
+  {
+   "name": "page1",
+   "elements": [
+    {
+     "type": "html",
+     "name": "description",
+     "html": "<h3>\nInstructions\n</h3>\n<p>\nIn this task, we are interested in the way that people think about different personality characteristics. Personality characteristics often come with both strengths and weaknesses, and we are interested in your perception of these for certain traits.\n</p>\n<p>\nFirst, we would like to know what you think about a person who is <strong>logical</strong>. In particular, we would like you to write about the <strong>strengths</strong> that a person who is logical brings to any situation. What value do they add in the workplace? How do they contribute to their friends lives? What kinds of careers and situations do they excel in?\n</p>"
+    },
+    {
+     "type": "comment",
+     "name": "Strengths Essay",
+     "title": "Write 2 to 3 paragraphs about the strengths of a logical person.",
+     "isRequired": true
+    }
+   ]
+  },
+  {
+   "name": "page2",
+   "elements": [
+    {
+     "type": "html",
+     "name": "question2",
+     "html": "<h3>\nInstructions\n</h3>\n<p>\nWe have also compiled a list of the benefits of being logical from previous participants in a similar study. We would like to know whether or not you agree with their descriptions.\n</p>"
+    },
+    {
+     "type": "matrix",
+     "name": "MatrixRatings",
+     "title": "Rate your agreement with each benefit of being logical.",
+     "isRequired": true,
+     "columns": [
+      {
+       "value": "-2",
+       "text": "Strongly Disagree"
+      },
+      {
+       "value": "-1",
+       "text": "Somewhat Disagree"
+      },
+      {
+       "value": "0",
+       "text": "Neither Agree nor Disagree"
+      },
+      {
+       "value": "1",
+       "text": "Somewhat Agree"
+      },
+      {
+       "value": "2",
+       "text": "Strongly Agree"
+      }
+     ],
+     "rows": [
+      {
+       "value": "logical01",
+       "text": "Logical people are able to solve a wide variety of problems."
+      },
+      {
+       "value": "logical02",
+       "text": "Employers appreciate it when their employees make logical decisions."
+     },
+     {
+       "value": "logical03",
+       "text": "Logical people tend to make good money."
+     },
+     {
+       "value": "logical04",
+       "text": "Others respect a person who can think logically."
+     },
+     {
+       "value": "logical05",
+       "text": "Thinking logically can help people make wise life decisions."
+     },
+     {
+       "value": "logical06",
+       "text": "Logical people get good grades easily."
+     },
+     {
+       "value": "logical07",
+       "text": "Many tasks require logical thinking, both for fun and for work: writing papers, doing math, completing sodokus, and playing chess."
+     },
+     {
+       "value": "logical08",
+       "text": "Logical thinkers have a competitive advantage over non-logical people in the job market."
+     },
+     {
+       "value": "logical09",
+       "text": "Thinking logically can help people get better results in negotiations, such as when buying a car or making a trade."
+     },
+     {
+       "value": "logical10",
+       "text": "Logical people give good advice to their friends."
+     },
+     {
+       "value": "logical11",
+       "text": "Practicing mental skills like logical thinking can help reduce the negative effects of aging."
+     },
+     {
+       "value": "logical12",
+       "text": "Logical people can work more efficiently than non-logical people."
+     },
+     {
+       "value": "logical13",
+       "text": "Logical people make better on-the-fly decisions, such as deciding what to say during an interview."
+     },
+     {
+       "value": "logical14",
+       "text": "Logical people produce more value for the economy than those who cannot think logically."
+     },
+     {
+       "value": "logical15",
+       "text": "Money management requires logical thinking, and so logical people manage their money well."
+     }
+     ]
+    }
+   ]
+  }
+ ]
+}; // end of logical framing survey
+
+var caring = {
+ "pages": [
+  {
+   "name": "page1",
+   "elements": [
+    {
+     "type": "html",
+     "name": "description",
+     "html": "<h3>\nInstructions\n</h3>\n<p>\nIn this task, we are interested in the way that people think about different personality characteristics. Personality characteristics often come with both strengths and weaknesses, and we are interested in your perception of these for certain traits.\n</p>\n<p>\nFirst, we would like to know what you think about a person who is <strong>caring</strong>. In particular, we would like you to write about the <strong>strengths</strong> that a person who is caring brings to any situation. What value do they add in the workplace? How do they contribute to their friends lives? What kinds of careers and situations do they excel in?\n</p>"
+    },
+    {
+     "type": "comment",
+     "name": "Strengths Essay",
+     "title": "Write 2 to 3 paragraphs about the strengths of a caring person.",
+     "isRequired": true
+    }
+   ]
+  },
+  {
+   "name": "page2",
+   "elements": [
+    {
+     "type": "html",
+     "name": "question2",
+     "html": "<h3>\nInstructions\n</h3>\n<p>\nWe have also compiled a list of the benefits of being caring from previous participants in a similar study. We would like to know whether or not you agree with their descriptions.\n</p>"
+    },
+    {
+     "type": "matrix",
+     "name": "MatrixRatings",
+     "title": "Rate your agreement with each benefit of being caring.",
+     "isRequired": true,
+     "columns": [
+      {
+       "value": "-2",
+       "text": "Strongly Disagree"
+      },
+      {
+       "value": "-1",
+       "text": "Somewhat Disagree"
+      },
+      {
+       "value": "0",
+       "text": "Neither Agree nor Disagree"
+      },
+      {
+       "value": "1",
+       "text": "Somewhat Agree"
+      },
+      {
+       "value": "2",
+       "text": "Strongly Agree"
+      }
+     ],
+     "rows": [
+      {
+       "value": "caring01",
+       "text": "Caring people have a knack for knowing how to help others."
+      },
+      {
+       "value": "caring02",
+       "text": "Employers appreciate it when an employee cares for other employees."
+     },
+     {
+       "value": "caring03",
+       "text": "Some high-quality jobs require caring personalities, such as being a doctor or nurse."
+     },
+     {
+       "value": "caring04",
+       "text": "Caring people are well-liked by others."
+     },
+     {
+       "value": "caring05",
+       "text": "Being caring is a good way to make many friends."
+     },
+     {
+       "value": "caring06",
+       "text": "Caring people make their communities nicer places to live in."
+     },
+     {
+       "value": "caring07",
+       "text": "Caring-ness is a highly valued trait in most careers."
+     },
+     {
+       "value": "caring08",
+       "text": "Caring people have high quality dating relationships."
+     },
+     {
+       "value": "caring09",
+       "text": "A person with a reputation for being caring is more likely to get the help they need from others."
+     },
+     {
+       "value": "caring10",
+       "text": "Caring people understand others well because they have lots of empathy."
+     },
+     {
+       "value": "caring11",
+       "text": "Acting in a caring way can help people gain the social capital they need to accomplish their goals."
+     },
+     {
+       "value": "caring12",
+       "text": "Caring for others is a fundamental social skill."
+     },
+     {
+       "value": "caring13",
+       "text": "Caring for others leads to higher life satisfaction."
+     },
+     {
+       "value": "caring14",
+       "text": "Caring people are considered to be more moral by others."
+     },
+     {
+       "value": "caring15",
+       "text": "A caring gesture can make another person's day."
+     }
+     ]
+    }
+   ]
+  }
+ ]
+}; // end of caring framing survey
+
+var control = {
+ "pages": [
+  {
+   "name": "page1",
+   "elements": [
+    {
+     "type": "html",
+     "name": "description",
+     "html": "<h3>\nInstructions\n</h3>\n<p>\nIn this task, we are interested in the way that people think about different personality characteristics. Personality characteristics often come with both strengths and weaknesses, and we are interested in your perception of these for certain traits.\n</p>\n<p>\nFirst, we would like to know what you think about a person who is <strong>persistant</strong>. In particular, we would like you to write about the <strong>strengths</strong> that a person who is persistent brings to any situation. What value do they add in the workplace? How do they contribute to their friends lives? What kinds of careers and situations do they excel in?\n</p>"
+    },
+    {
+     "type": "comment",
+     "name": "Strengths Essay",
+     "title": "Write 2 to 3 paragraphs about the strengths of a persistent person.",
+     "isRequired": true
+    }
+   ]
+  },
+  {
+   "name": "page2",
+   "elements": [
+    {
+     "type": "html",
+     "name": "question2",
+     "html": "<h3>\nInstructions\n</h3>\n<p>\nWe have also compiled a list of the benefits of being persistent from previous participants in a similar study. We would like to know whether or not you agree with their descriptions.\n</p>"
+    },
+    {
+     "type": "matrix",
+     "name": "MatrixRatings",
+     "title": "Rate your agreement with each benefit of being persistent.",
+     "isRequired": true,
+     "columns": [
+      {
+       "value": "-2",
+       "text": "Strongly Disagree"
+      },
+      {
+       "value": "-1",
+       "text": "Somewhat Disagree"
+      },
+      {
+       "value": "0",
+       "text": "Neither Agree nor Disagree"
+      },
+      {
+       "value": "1",
+       "text": "Somewhat Agree"
+      },
+      {
+       "value": "2",
+       "text": "Strongly Agree"
+      }
+     ],
+     "rows": [
+      {
+       "value": "logical01",
+       "text": "Persistent people can solve many kinds of problems."
+      },
+      {
+       "value": "logical02",
+       "text": "Employers appreciate an employee who shows persistence."
+     },
+     {
+       "value": "logical03",
+       "text": "Persistence is associated with success in school."
+     },
+     {
+       "value": "logical04",
+       "text": "Persistence pays off in most situations."
+     },
+     {
+       "value": "logical05",
+       "text": "Being persistent is a good way to accomplish goals."
+     },
+     {
+       "value": "logical06",
+       "text": "Persistent people make their communities nicer places to live."
+     },
+     {
+       "value": "logical07",
+       "text": "Persistence is a highly valued trait in most careers."
+     },
+     {
+       "value": "logical08",
+       "text": "Persistent people develop skills better."
+     },
+     {
+       "value": "logical09",
+       "text": "A person with a reputation for being persistent is more respected than those who are seen as giving up easily."
+     },
+     {
+       "value": "logical10",
+       "text": "Persistent people tend to make good money."
+     }
+     ]
+    }
+   ]
+  }
+ ]
+}; // end of control framing survey
+
+jatos.onLoad(function () {
+  var frame = jatos.studySessionData.condition.frame;
+  var json = '';
+  if (frame == 'logical') {
+    json = logical;
+  } else if (frame == 'caring') {
+    json = caring;
+  } else if (frame == 'control') { // Note that I do not have a control condition in the summer study
+    json = control;
+  }
+  // Randomize question order for good measure
+  json.pages[1].elements[1].rows = shuffle(json.pages[1].elements[1].rows);
+  instantiateSurvey(json);
+});
+
+</script>
+</html>
