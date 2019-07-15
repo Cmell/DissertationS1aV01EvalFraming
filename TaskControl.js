@@ -37,10 +37,25 @@ var advanceTask = function (resultData) {
       )
     }
   };
+  var endStudy = function () {
+    if (typeof jatos.studySessionData.endURL !== 'undefined') {
+      jatos.endStudyAjax(true, "Finished JATOS section",
+        onSuccess = function () {
+          window.location = jatos.studySessionData.endURL;
+        }
+      );
+    } else {
+      jatos.endStudy("Ended successfully at max index.");
+    }
+  };
 
   jatos.studySessionData.curIndex = jatos.studySessionData.curIndex + 1;
-  jatos.studySessionData.curTaskCtrl = jatos.studySessionData.taskControl[
-    jatos.studySessionData.curIndex
-  ];
-  task1();
+  if (jatos.studySessionData.curIndex >= jatos.studySessionData.taskControl.length) {
+    endStudy();
+  } else {
+    jatos.studySessionData.curTaskCtrl = jatos.studySessionData.taskControl[
+      jatos.studySessionData.curIndex
+    ];
+    task1();
+  }
 };
