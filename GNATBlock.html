@@ -108,7 +108,7 @@
   			catR.x = 630;
   			catR.y = 10;
   			catR.textAlign="right";
-  			var stim = new createjs.Text("+","40px Arial");
+  			var stim = new createjs.Text("","40px Arial");
   			stim.x = 320;
   			stim.y = 240;
   			stim.textAlign = "center";
@@ -197,7 +197,7 @@
                 resp.keyPressed = "Y";
                 resp.rt = respTime;
   							if (trialType == "go") {
-  								stim.text = "+";
+  								stim.text = "";
   								stim.color="black";
                   resp.sdtRespCode = "HIT";
   							} else {
@@ -214,7 +214,7 @@
   								stim.color = "blue";
                   resp.sdtRespCode = "MISS";
   							} else {
-  								stim.text = "+";
+  								stim.text = "";
   								stim.color = "black";
                   resp.sdtRespCode = "CR";
   							}
@@ -230,7 +230,7 @@
   				} else if (step == "fb") {
   					if (event.time>fbend) {
   						createjs.Ticker.reset();
-  						stim.text = "+";
+  						stim.text = "";
   						stim.color = "black";
   						stim.font = "40px Arial";
   						stage.update();
